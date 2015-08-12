@@ -1,0 +1,19 @@
+{%extends 'index.html'%}
+{%block page-content%}
+<script>
+$(function(){
+	$("#id_username").focus();
+});
+</script>
+<div align="center">
+<p class="error">{{error}}</p>
+</div>
+<div align="center">
+<form action="" method="post">
+{% csrf_token %}
+{{lf.as_p}}
+<input type="submit" name="submit" value="login"/>
+</form>
+<button id="but" onclick="javascript:window.location.href='/registerdetail/'">register</button>
+</div>
+{%endblock%}

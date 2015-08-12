@@ -1,0 +1,23 @@
+{%extends 'index.html'%}
+{%block page-content%}
+<script type="text/javascript">
+$(function(){
+	$("#id_username").focus();
+});
+</script>
+<div align="center">
+<p class="error">{{error}}</p>
+<form ation="" method="post" enctype="multipart/form-data">
+{%csrf_token%}
+<table>
+{%for field in rf%}
+<tr>
+<td>{{field.label_tag}}</td><td>{{field}}</td>
+</tr>
+<tr><td colspan="2">{{field.errors}}</td></tr>
+{%endfor%}
+<tr><td colspan="2"><input type="submit" name="submit" value="register"/></td></tr>
+</table>
+</form>
+</div>
+{%endblock%}

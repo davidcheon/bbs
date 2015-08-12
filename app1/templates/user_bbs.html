@@ -1,0 +1,23 @@
+{%extends 'userdetailtemp.html'%}
+{% block page-content%}
+<div>
+<p class="error">{{error}}</p>
+{%ifequal ud.bs None%}
+<p>no bbs</p>
+{%else%}
+{%for bbs in ud.bs%}
+<div class="bbs_title">
+{{bbs.bbs_title}}
+</div>
+<div class="bbs_summary">
+       {{bbs.bbs_summary}}
+</div>
+<div class="to_right_show">
+<p>{{bbs.bbs_create_date.ctime}}&nbsp;&nbsp;&nbsp;written by {{bbs.bbs_from_user.bbs_user.username}}</p>
+</div>
+<br/>
+<hr/>
+{%endfor%}
+{%endifequal%}
+</div>
+{%endblock%}

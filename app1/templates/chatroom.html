@@ -1,0 +1,66 @@
+{%extends 'index.html'%}
+{%block page-content%}
+<script>
+$(function(){
+	var B=setInterval(function(){
+		$.ajax({
+		url:'/getchatcontent/',
+		type:'GET',
+		dataType:'json',
+		success:function(data){
+			if (data != 'None'){
+			for(var i=0;i<data.length;i++){
+				var h='<ul><li><a class="username" href="/registerdetail/"'+data[i].fromuser+'>'
+				+data[i].fromuser+'</a>'+' @said:@ <span class="chatcontent">'+data[i].content+'<span class="pubdate">'+data[i].pubdate+'</span></span></li></ul>';
+				$('#chatcontent').append(h);
+			}
+			}
+			chatcontent.scrollTop+=1000;
+		},
+		error:function(data){
+			
+			chatcontent.scrollTop+=1000;
+		},
+		}	
+	)
+	},1000);
+	
+});
+function sendchatcontent(){
+		var value={'content':$('#id_content').val(),'csrfmiddlewaretoken':getcookie('csrftoken'),};
+		$.ajax({
+			url:'/chatroom/',
+			type:'POST',
+			data:value,
+			dataType:'text',
+			success:function(data){
+						$("#id_content").val("");
+				
+			}
+			,
+			error:function(data){
+				alert(data);
+			},
+		});
+		return false;
+	}
+</script>
+<div class="chatroom"  id="chatcontent">
+{%for item in chatcontents%}
+<ul>
+<li><a class="username" href="/registerdetail/{{item.fromuser}}/">{{item.fromuser}}</a>@said:@<span class="chatcontent">{{item.content}}
+&nbsp;&nbsp;&nbsp;<span class="pubdate">{{item.pubdate}}</span></span></li>
+</ul>
+{%endfor%}
+</div>
+{%ifnotequal request.session.username None%}
+<div class="pubcontent">
+<form method="post" action="" onsubmit="return sendchatcontent();">
+{%csrf_token%}
+{{chatform.label_tag}}{{chatform}}
+{{chatform.error}}
+<input type="submit" name="submit" value="send"/>
+</form>
+</div>
+{%endifnotequal%}
+{%endblock%}

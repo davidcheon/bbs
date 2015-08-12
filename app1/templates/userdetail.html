@@ -1,0 +1,57 @@
+{%extends 'userdetailtemp.html'%}
+{% block page-content%}
+<div align="center">
+<p class="error">{{error}}</p>
+<form id="updateform" action="/updateuser/" method="post" enctype="multipart/form-data">
+<table border="1">
+<script type="text/javascript">
+$(function(){
+	var fileobj=document.getElementsByTagName('input')[3]; 
+	fileobj.outerHTML=fileobj.outerHTML.replace(/(value=\").+\"/i,"$1\""); 
+});
+</script>
+<tr><td><label for="id_username">Username:</label></td><td> <input id="id_username" maxlength="50" name="username" type="text" value="{{ud.username}}"/></td></tr>
+<tr><td><label for="id_email">Email:</label> </td><td><input id="id_email" maxlength="100" name="email" type="text" value="{{ud.email}}" /></td></tr>
+<tr><td><label for="id_bbs_signature">Bbs signature:</label></td> <td><input id="id_bbs_signature" maxlength="100" name="bbs_signature" type="text" value="{{ud.bbs_signature}}"/></td></tr>
+<tr><td><label></label></td><td><input readonly/></td></tr>
+
+<tr><td><label>Last Login</label></td><td><input type="text" id="lastlogin" name="lastlogin" value="{{ud.lastlogin}}" readonly/></td></tr>
+<tr><td><label>Last Logout</label></td><td><input type="text" id="lastlogout" name="lastlogout" value="{{ud.lastlogout}}" readonly/></td></tr>
+<tr><td><label>Bbs user photo:</label> </td><td>{{ud.bbs_user_photo.url}}</td></tr>
+<tr><td><label  for="id_bbs_user_photo">Change photo</label></td><td><input id="id_bbs_user_photo" name="bbs_user_photo" type="file" /></td></tr> 
+<tr><td colspan="2" align="center"><input  type="submit" name="submit" value="change"/></td></tr>
+</table>
+</form>
+
+</div>
+<div align="left">
+<h2>留言板</h2>
+</div>
+<div id="message">
+{%for item in ud.items%}
+<div>
+<p class="sendfromuser"><a href="/registerdetail/{{item.fromuser}}/">{{item.fromuser}}</a>&nbsp;&nbsp;said:</p>
+</div>
+<div>
+<p class="onemessage">{{item.content}}</p>
+</div>
+<div class="to_right_show">
+<p class="senddate">{{item.senddate}}</p>
+</div>
+<hr/>
+{%endfor%}
+
+
+</div>
+{%ifnotequal request.session.username None%}
+<div align="center">
+<form id="sendmessageform" method="POST" action="" onsubmit="return sendmessage(this);">
+{%csrf_token%}
+{{sendmessageform.label_tag}}{{sendmessageform}}
+<input type="hidden" name="touser" value="{{ud.user}}"/>
+<input type="submit" name="submit" value="Send"/>
+</form>
+</div>
+{%endifnotequal%}
+
+{%endblock%}

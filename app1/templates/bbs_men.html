@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+{%block page-content%}
+{%for bbs in bbs_list%}
+<div id="bbs_{{bbs.id}}">
+<a href="/bbs_detail/{{bbs.id}}/">{{bbs.bbs_title}}</a>
+<br/>
+{{bbs.bbs_summary}}
+{% ifequal information.username 'wang'%}
+<br/>
+<a onclick="javascript:bbs_delete({{bbs.id}});" class="bbs_delete">delete</a>
+{%endifequal%}
+<hr/>
+</div>
+{%endfor%}
+<a href="/bbs_pub/3/">bbs_pub</a>
+{%endblock%}

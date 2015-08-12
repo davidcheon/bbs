@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>BBS</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/customer.js"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/customer.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">BBS</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+     		  {%ifequal order 0%}
+              <li class="active"><a href="/">All</a></li>
+              {%else%}
+              <li class=""><a href="/">All</a></li>
+              {%endifequal%}
+              {%ifequal order 1%}
+               <li class="active"><a href="/bbs_news/">News</a></li>
+              {%else%}
+               <li><a href="/bbs_news/">News</a></li>
+              {%endifequal%}
+               {%ifequal order 2%}
+               <li class="active" ><a href="/bbs_sports/">Sports</a></li>
+              {%else%}
+               <li><a href="/bbs_sports/">Sports</a></li>
+              {%endifequal%}
+               {%ifequal order 3%}
+               <li class="active" ><a  href="/bbs_men/">Men</a></li>
+              {%else%}
+               <li><a href="/bbs_men/">Men</a></li>
+              {%endifequal%}
+              {%ifnotequal request.session.username None%}
+              {%ifequal order 4 %}
+              <li class="active" ><a  href="/chatroom/">Chat</a></li>
+              {%else%}
+              <li><a  href="/chatroom/">Chat</a></li>
+              {%endifequal%}
+              
+              {%endifnotequal%}
+            </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">onlines<span class="caret"></span></a>
+            <ul class="dropdown-menu" id="onlineusers">
+             {%for user in onlineusers%}
+                  <li><a href="/chatwith/{{user}}/">{{user}}</a></li>
+              {%endfor%}
+            </ul>
+                </li>
+          </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">{{information.username}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+             
+                  <li><a href="/loginout/">{{information.action1}}</a></li>
+                  <li><a href="/registerdetail/">{{information.action2}}</a></li>
+            </ul>
+                </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+          <li><a href="">messages</a></li>
+          </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="">
+       {%block page-content%}
+       {%for bbs in bbs_list%}
+       <div id="bbs_{{bbs.id}}">
+       <div class="bbs_title">
+       <a href="/bbs_detail/{{bbs.id}}/">{{bbs.bbs_title}}</a>
+       </div>
+       <div class="bbs_summary">
+       {{bbs.bbs_summary}}
+       </div>
+       <div class="to_right_show">
+       <p>{{bbs.bbs_create_date.ctime}}&nbsp;&nbsp;&nbsp;written by <a href="/registerdetail/{{bbs.bbs_from_user.bbs_user.username}}/">{{bbs.bbs_from_user.bbs_user.username}}</a></p>
+       </div>
+       <br/>
+        {% ifequal information.username bbs.bbs_from_user.bbs_user.username%}
+		<a onclick="javascript:bbs_delete({{bbs.id}});" class="bbs_delete">delete</a>
+		{%endifequal%}
+       <hr/>
+       </div>
+       {%endfor%}
+       {%endblock%}
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{%extends 'userdetailtemp.html'%}
+{% block page-content%}
+<div>
+<p class="error">{{error}}</p>
+{%ifequal ud.cs None%}
+<p>no comments</p>
+{%else%}
+{%for cs in ud.cs%}
+<div>
+{{cs.comment_content}}
+</div>
+<div>
+<p>from </p><p style="color:red;">{{cs.comment_to_bbs.bbs_title}}</p>
+</div>
+<div class="to_right_show">
+<p>{{cs.comment_create_date}}</p>
+</div>
+<br/>
+<hr/>
+{%endfor%}
+{%endifequal%}
+</div>
+{%endblock%}

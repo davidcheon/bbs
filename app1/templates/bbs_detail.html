@@ -1,0 +1,48 @@
+{%extends 'index.html'%}
+{%block page-content%}
+<div class="page-contents" >
+<div class="bbs_title">
+<a href="/bbs_detail/{{bbs.id}}/">{{bbs.bbs_title}}</a>
+</div>
+<br/>
+<div class="bbs_content">
+{{bbs.bbs_content|safe}}
+<div align="right">
+<p style="color:green;">writen by <a href="/registerdetail/{{bbs.bbs_from_user.bbs_user.username}}/">{{bbs.bbs_from_user.bbs_user.username}}</a></p>
+<p style="color:green;">{{bbs.bbs_create_date}}</p>
+</div>
+</div>
+<hr/>
+<form method="post">
+{{cf.as_p}}
+<input type="submit" name="submit" value="comment"/>
+</form>
+<hr/>
+<h2>Comments:</h2>
+{%for comment in comments%}
+<p style="color:green;"><a href="/registerdetail/{{comment.comment_from_user.bbs_user.username}}/">{{comment.comment_from_user.bbs_user.username}}</a> said:</p>
+<p style="color:green;">{{comment.comment_content}}</p>
+{%with cid=comment.id%}
+{%for key,value in com_to_com.items%}
+{%ifequal key comment.id%}
+{%for eachvalue in value%}
+<div>
+<p style="color:black;"><a href="/registerdetail/{{eachvalue.comment_to_comment_from_user}}/">{{eachvalue.comment_to_comment_from_user}}</a> said:</p><p style="color:red;">{{eachvalue.comment_to_comment_content}}</p>
+</div>
+{%endfor%}
+<div>
+<form action="/add_sub_comment/" method="post">
+<input type="text" name="comment_to_comment_content" id="id_comment_to_comment_content"/>
+<input type="hidden" name="cate" value="/bbs_detail/"/>
+<input type="hidden" name="id" value="{{bbs.id}}"/>
+<input type="hidden" name="tocommentid" value="{{cid}}"/>
+<input type="submit" name="submit" value="commit"/>
+</form>
+</div>
+<hr/>
+{%endifequal%}
+{%endfor%}
+{%endwith%}
+{%endfor%}
+</div>
+{%endblock%}
